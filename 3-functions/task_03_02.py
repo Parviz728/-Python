@@ -30,10 +30,10 @@ def field_filter(field_name: str, collection: list):
 
 def query(collection: list, select: FunctionType, *field_filter: FunctionType) -> list:
     select(*random.choices(list(db.keys()), k=random.randint(1, len(db))))
-    print(f"ans = {ans}")
+    # print(f"ans = {ans}")
     for f in field_filter:
         x = random.choice(list(db.keys()))
-        print(f"x = {x}, db[x] = {db[x]}")
+        # print(f"x = {x}, db[x] = {db[x]}")
         f(x, db[x])
     
     return ans
