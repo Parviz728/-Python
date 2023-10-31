@@ -221,14 +221,3 @@ print(Euro.course[Ruble.sign])
 # 60
 print(e.sign)
 # €
-
-'''
-class Defaults(object):    
-    def __getitem__(self, key):
-        try:            
-            return globals()[key]
-        finally:            
-            pass
-        scheduler_interval =  "{test_var}"
-        test_var = "0 0 * * *"print(scheduler_interval.format_map(Defaults()))
-'''
