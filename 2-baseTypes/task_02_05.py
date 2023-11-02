@@ -145,8 +145,8 @@ def noDuplicatesList():
     return res
         
 report["FIO"] = [f"{name} {surname} {fatherName}" for id, name, surname, fatherName in employees]
-report["avg_salaries"] = {key: mean(value["salary"]) for key, value in Emp.items()}.values()
-report["avg_bonuses"] = {key: mean(value["bonus"]) for key, value in Emp.items()}.values()
+report["avg_salaries"] = [mean(value["salary"]) for value in Emp.values()] # Средняя зарплата
+report["avg_bonuses"] = [mean(value["bonus"]) for value in Emp.values()] # Средние бонусы 
 report["Email"] = noDuplicatesList()
 for i in zip(report['empID'], report['FIO'], report['avg_salaries'], report['avg_bonuses'], report['Email']):
     print(*i)
