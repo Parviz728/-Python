@@ -135,18 +135,34 @@ for id in Emp:
         if empID == id:
             Emp[id][salaryType].append(amount)
 
-def noDuplicatesList():
-    was = set()
-    res = []
-    for i in emails:
-        if i[2] not in was:
-            res.append(i[2])
-        was.add(i[2])
-    return res
+def noDuplicatesdict():
+    """
+    Формирует словарь где у каждого айдишника есть список его почт
         
+    :return: dict 
+    """
+    was = set()
+    res = defaultdict(list)
+    for i in employees:
+        ID = i[0]
+        count = 0
+        for id, empID, email in emails:
+            if empID == ID:
+                count += 1
+                if email not in was:
+                    res[empID].append(email)
+                was.add(email)
+        if count == 0: # если ни разу мы не провалились в if на 150 строчке, значит у этого сотрудника нет почты
+            res[ID].append(None)
+    return res
+
 report["FIO"] = [f"{name} {surname} {fatherName}" for id, name, surname, fatherName in employees]
 report["avg_salaries"] = [mean(value["salary"]) for value in Emp.values()] # Средняя зарплата
-report["avg_bonuses"] = [mean(value["bonus"]) for value in Emp.values()] # Средние бонусы 
-report["Email"] = noDuplicatesList()
-for i in zip(report['empID'], report['FIO'], report['avg_salaries'], report['avg_bonuses'], report['Email']):
-    print(*i)
+report["avg_bonuses"] = [mean(value["bonus"]) for value in Emp.values()] # Средние бонусы
+report["Email"] = noDuplicatesdict()
+ans = {}
+for empID, emails in report["Email"].items():
+    for email in emails:
+        ans[email] = [report['empID'][empID - 1], report['FIO'][empID - 1], report['avg_salaries'][empID - 1], report['avg_bonuses'][empID - 1]]
+for key, value in ans.items():
+    print(*value, key)  
