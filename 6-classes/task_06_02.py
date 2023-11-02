@@ -1,4 +1,5 @@
 from abc import ABC
+from typing import Any
 
 kurses = {"$": 1.2, "₽": 60, "€": 1}
 
@@ -71,7 +72,7 @@ class Course:
         :param value: значение которое мы присваиваем
         :type value: str
         
-        :return: str
+        :return: None
         """
         kurses[value[-1]] = self.convert(value) 
         setattr(instance, self.name, kurses) # 1€ = 60 рублей, 1€ = 1.2$
@@ -121,6 +122,7 @@ class Currency(ABC):
         :return: класс валюты в которую конвертируем
         """
         return name((self.amount / self.course[self.__class__.sign]) * self.course[name.sign])
+    
     
     def __add__(self, other):
         """
