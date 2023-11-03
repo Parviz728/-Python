@@ -1,45 +1,46 @@
 import random
 from types import FunctionType
+from typing import List, Tuple
 friends = [{'name': 'Сэм', 'gender': 'Мужской', 'sport': 'Баскетбол', 'email': 'email@email.com'}, 
            {'name': 'Эмили', 'gender': 'Женский', 'sport': 'Волейбол', 'email': 'email1@email1.com'}
 ]
 
-# отсюда будем брать данные
-db = {"name": ["Парвиз", "Ваня", "Женя", "Лёша", "Настя"],
-      "sport": ["Баскетбол", "Волейбол", "Футбол", "Теннис", "Хоккей"],
-      "gender": ["Мужик", "НеМужик"],
-      "email": ["parviz@korus.ru", "Ivan@korus.ru", "zhenyok@korus.ru", "lekha@korus.ru", "nastya@korus.ru"]}
-
-count = len(friends)
-ans = [{} for i in range(count)] # создаем столько пустых словарей, сколько значений в списке friends
-
-def select(*field_name):
-    for d in ans:
-        for i in field_name:
-            d[i] = None
-
-# select("name", "sport", "gender")
-# print(ans)
+# select = query(select)
+def select(*field_name: Tuple[str]):
+    def inner():
+        for i in range(len(friends)):
+            change = {}
+            for field in field_name:
+                change[field] = friends[i][field]
+            friends[i] = change
+    return inner
 
 def field_filter(field_name: str, collection: list):
-    for i in range(len(ans)):
-        ans[i][field_name] = collection[i]
+    def inner():
+        for i in range(len(friends)):
+            if i < len(collection):
+                friends[i][field_name] = collection[i]
+            else:
+                friends[i][field_name] = collection[-1]
+    return inner
 
-# field_filter("sport", ["Баскетбол", "Волейбол"])
-# print(ans)
+def query(collection: List[dict], select: FunctionType, *field_filter):
+    select()
+    for func in field_filter:
+        func()
+ 
+res_of_select = select("name", "gender", "sport") # -> function
+res_of_filed_filter1 = field_filter("sport", ["Баскетбол", "Волейбол"]) # -> function
+res_of_field_filter2 = field_filter("gender", ["Мужской"]) # -> function
 
-def query(collection: list, select: FunctionType, *field_filter: FunctionType) -> list:
-    select(*random.choices(list(db.keys()), k=random.randint(1, len(db))))
-    # print(f"ans = {ans}")
-    for f in field_filter:
-        x = random.choice(list(db.keys()))
-        # print(f"x = {x}, db[x] = {db[x]}")
-        f(x, db[x])
-    
-    return ans
-
-print(query(friends, select, field_filter))
+query(friends, 
+      res_of_select, 
+      res_of_filed_filter1,
+      res_of_field_filter2,
+      )
+print(friends)
         
-
-
-
+        
+        
+        
+        
