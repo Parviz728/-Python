@@ -1,4 +1,4 @@
-import numpy as np
+from random import randint
 
 class Matrix:
     """
@@ -12,41 +12,15 @@ class Matrix:
         Attributes:
             matr (np.array): Матрица
     """
+    
     def __init__(self, *args, **kwargs):
         self.matr = []
         if len(args) == 1: # если введен один аргумент       
-            self.matr = np.array(args[0])
+            self.matr = list(args[0])
         else: # если аргкментов несколько
             # надо проверить что введенно ровно два целых числа, иначе косяк
             if len(args) == 2 and isinstance(args[0], int) and isinstance(args[1], int):
-                self.matr = np.random.rand(args[0], args[1])
-    
-          
-    @staticmethod
-    def __verify_operation(operation: str, matr1, matr2):
-        """
-        Args:
-            operation (str): математическая операция
-            matr1 (Matrix): первая матрица
-            matr2 (Matrix): вторая матрица
-
-        Raises:
-            ArithmeticError: _description_
-            ArithmeticError: _description_
-            AttributeError: _description_
-            TypeError: _description_
-        """
-        if isinstance(matr1, Matrix) and isinstance(matr2, Matrix):
-            if operation == '+' or operation == '-':
-                if matr1.matr.shape != matr2.matr.shape:
-                    raise ArithmeticError("Обе матрицы должны быть одинакового размера")
-            elif operation == '*':
-                if matr1.matr.shape[1] != matr2.matr.shape[0]: # количество столбцов первой матрицы должно быть равно количеству строк второй матрицы
-                    raise ArithmeticError("Нельзя умножить такие матрицы")
-            else:
-                raise AttributeError("это не математическая операция")
-        else:
-            raise TypeError("операнды должны матрицами")
+                self.matr = [[randint(1, 10) for i in range(args[1])] for _ in range(args[0])]
         
     def __str__(self):
         return '\n'.join([' '.join(map(str, row)) for row in self.matr])
@@ -60,20 +34,57 @@ class Matrix:
         Returns:
             _type_: Matrix
         """
-        self.__verify_operation('+', self, other)
-        return Matrix(self.matr + other.matr)
+        if not isinstance(other, Matrix):
+            raise TypeError("операнд должен быть матрицей")
+        else:
+            if len(self.matr) == len(other.matr) and len(self.matr[0]) == len(other.matr[0]):
+                rows = len(self.matr)
+                cols = len(self.matr[0])
+                res = [[0] * cols for _ in range(rows)] # создаем пустую матрицу того же размеры что матрицы операнды
+                for row in range(rows):
+                    for col in range(cols):
+                        res[row][col] = self.matr[row][col] + other.matr[row][col]
+                return Matrix(res)
+            else:
+                raise ValueError("матрицы должны быть одинакового размера")
+                        
+                        
     
     def __sub__(self, other):
         """
-        Функция вычитания
+        Вычитание двух матриц
         Args:
             other (_type_:Matrix): Вторая матрица
 
         Returns:
             _type_: Matrix
         """
-        self.__verify_operation('-', self, other)
-        return Matrix(self.matr - other.matr)
+        if not isinstance(other, Matrix):
+            raise TypeError("операнд должен быть матрицей")
+        else:
+            if len(self.matr) == len(other.matr) and len(self.matr[0]) == len(other.matr[0]):
+                rows = len(self.matr)
+                cols = len(self.matr[0])
+                res = [[0] * cols for _ in range(rows)] # создаем пустую матрицу того же размеры что матрицы операнды
+                for row in range(rows):
+                    for col in range(cols):
+                        res[row][col] = self.matr[row][col] - other.matr[row][col]
+                return Matrix(res)
+            else:
+                raise ValueError("матрицы должны быть одинакового размера")
+    
+    def transp(self):
+        """
+        Returns:
+            _type_: Matrix
+            _description_: Транспонированная матрица
+        """
+        res = [
+                [
+                    self.matr[col][row] for col in range(len(self.matr))
+                ] for row in range(len(self.matr[0]))
+            ]
+        return res
     
     def __mul__(self, other):
         """
@@ -85,16 +96,21 @@ class Matrix:
             _type_: Matrix
             _description: Возвращается матрица произведения
         """
-        self.__verify_operation('*', self, other)
-        return Matrix(self.matr * other.matr)
-    
-    def transp(self):
-        """
-        Returns:
-            _type_: Matrix
-            _description_: Транспонированная матрица
-        """
-        return self.matr.transpose()
+        if not isinstance(other, Matrix):
+            raise TypeError("операнд должен быть матрицей")
+        else:
+            if len(self.matr[0]) == len(other.matr):
+                rows = len(self.matr)
+                cols = len(other.matr[0])
+                res = [[0] * cols for _ in range(rows)]
+                for row in range(rows):
+                    for col in range(cols):
+                        for k in range(cols):
+                            res[row][col] += self.matr[row][k] * other.matr[k][col]  
+                return Matrix(res)
+            else:
+                raise ValueError("матрицы не подходят по размеру")
+                        
         
     def __eq__(self, other):
         """
@@ -111,7 +127,11 @@ class Matrix:
         """
         if not isinstance(other, Matrix):
             raise TypeError("справа должна быть матрица")
-        return np.array_equal(self.matr, other.matr)
+        for row in range(len(self.matr)):
+            for col in range(len(self.matr[0])):
+                if self.matr[row][col] != other.matr[row][col]:
+                    return False
+        return True
     
     def is_square(self):
         """
@@ -120,7 +140,7 @@ class Matrix:
             _type_: bool
             _description_: Квадратная ли матрица
         """
-        return self.matr.shape[0] == self.matr.shape[1]
+        return len(self.matrix) == len(self.matrix[0])
     
     def is_symetric(self):
         """_summary_
@@ -129,11 +149,17 @@ class Matrix:
             _type_: bool
             _description_: Симметрична ли матрица
         """
-        return np.array_equal(self.transp(), self.matr)
+        if not self.is_square():
+            return False
+        for row in range(len(self.matr)):
+            for col in range(len(self.matr[0])):
+                if self.matr[row][col] != self.matr[col][row]:
+                    return False
+        return True
     
 m = Matrix([[1,2], [3, 4]])
 n = Matrix([[1,1], [1, 0]])
-print(m + n)
+print(m * n)
             
             
         
