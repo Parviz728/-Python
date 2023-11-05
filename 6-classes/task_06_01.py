@@ -48,8 +48,6 @@ class Matrix:
             else:
                 raise ValueError("матрицы должны быть одинакового размера")
                         
-                        
-    
     def __sub__(self, other):
         """
         Вычитание двух матриц
