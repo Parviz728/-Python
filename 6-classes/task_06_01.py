@@ -94,9 +94,7 @@ class Matrix:
             _type_: Matrix
             _description: Возвращается матрица произведения
         """
-        if not isinstance(other, Matrix):
-            raise TypeError("операнд должен быть матрицей")
-        else:
+        if isinstance(other, Matrix):
             if len(self.matr[0]) == len(other.matr):
                 rows = len(self.matr)
                 cols = len(other.matr[0])
@@ -106,8 +104,11 @@ class Matrix:
                         for k in range(cols):
                             res[row][col] += self.matr[row][k] * other.matr[k][col]  
                 return Matrix(res)
-            else:
-                raise ValueError("матрицы не подходят по размеру")
+        elif isinstance(other, int):
+            res = [self.matr[row][col] * other for col in range(len(self.matr[0])) for row in range(len(self.matr))]
+            return Matrix(res)
+        else:
+            raise ValueError("матрицы не подходят по размеру")
                         
         
     def __eq__(self, other):
