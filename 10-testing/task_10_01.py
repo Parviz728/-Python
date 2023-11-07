@@ -1,6 +1,6 @@
 import unittest
 import sys
-sys.path.insert(0, 'C:/Users/pnorov/Desktop/-Python/6-classes')
+sys.path.append('C:/Users/pnorov/Desktop/-Python/6-classes')
 
 from task_06_01 import m, n, Matrix
 
