@@ -214,14 +214,14 @@ print(sum([Euro(i) for i in range(5)]))
 print(e > Euro(6))
 # # False
 print(e + Dollar(10))
-# # 13.333333333333334€
+# 13.333333333333334€
 print(Dollar(10) + e)
-# # 16.0$
-# e.course = "2$" # установили курс евро в два доллара, можно установить курс любой валюты
-# # 10.0$
-# print(Euro.course[Dollar.sign])
-# # 2
-# print(Euro.course[Ruble.sign])
-# # 60
-# print(e.sign)
-# # €
+# 16.0$
+e.course = "2$" # установили курс евро в два доллара, можно установить курс любой валюты
+# 10.0$
+print(Euro.course[Dollar.sign])
+# 2
+print(Euro.course[Ruble.sign])
+# 60
+print(e.sign)
+# €

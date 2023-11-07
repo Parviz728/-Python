@@ -15,14 +15,15 @@ class MatrixTest(unittest.TestCase):
         self.assertEqual(m * n, Matrix([[3, 1], [7, 3]]))
         
     def test_eq(self):
-        self.assertEqual(m == n, False)
+        self.assertFalse(m == n)
         
     def test_is_square(self):
-        self.assertEqual(m.is_square(), True)
+        self.assertTrue(m.is_square())
         
     def test_is_symetric(self):
-        self.assertEqual(m.is_symetric(), False)
+        self.assertFalse(m.is_symetric())
         
-
+if __name__ == '__main__':
+    unittest.main()
         
         
