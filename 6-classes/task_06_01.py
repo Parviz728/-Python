@@ -139,7 +139,7 @@ class Matrix:
             _type_: bool
             _description_: Квадратная ли матрица
         """
-        return len(self.matrix) == len(self.matrix[0])
+        return len(self.matr) == len(self.matr[0])
     
     def is_symetric(self):
         """_summary_
@@ -158,7 +158,7 @@ class Matrix:
     
 m = Matrix([[1,2], [3, 4]])
 n = Matrix([[1,1], [1, 0]])
-print(m * n)
+print(m.is_symetric())
             
             
         
