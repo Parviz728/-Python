@@ -1,5 +1,13 @@
 # Первое решение
 def myzip(*args):
+    """
+    Функция аналог zip
+
+    :param args: совокупность итерабельных объектов
+    :type args: tuple
+
+    :yield: Any
+    """
     mx = len(max(args, key=len))
     for i in range(mx):
         for lst in args:
