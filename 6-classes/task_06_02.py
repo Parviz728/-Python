@@ -96,7 +96,7 @@ class Currency(ABC):
     
     def __init__(self, amount):
         # здесь вызовется дескриптор, т.к у него приоритет выше чем у свойств атрибутов
-        # В классе Currency образуется protected атрибут _course со значением amount
+        # В классе Currency образуется protected атрибут _amount со значением amount
         self.amount = amount
         self.course = "1.2$" # устанавливаем initial значение одного Евро
         
